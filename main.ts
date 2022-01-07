@@ -1,3 +1,9 @@
+input.onButtonPressed(Button.A, function () {
+    maqueen.servoRun(maqueen.Servos.S1, 180)
+})
+input.onButtonPressed(Button.AB, function () {
+    maqueen.servoRun(maqueen.Servos.S1, 90)
+})
 radio.onReceivedString(function (receivedString) {
     RX = receivedString
     Commande = RX.split(";")
@@ -26,6 +32,21 @@ radio.onReceivedString(function (receivedString) {
         maqueen.motorStop(maqueen.Motors.M2)
     }
 })
+input.onButtonPressed(Button.B, function () {
+    maqueen.servoRun(maqueen.Servos.S1, 0)
+})
+radio.onReceivedValue(function (name, value) {
+    if (name == "Servo1") {
+        Pos_S1 += value
+        if (Pos_S1 < 0) {
+            Pos_S1 = 0
+        } else if (Pos_S1 > 180) {
+            Pos_S1 = 180
+        } else {
+            maqueen.servoRun(maqueen.Servos.S1, Pos_S1)
+        }
+    }
+})
 let vitesse_D = 0
 let vitesse_G = 0
 let Ball_D_value = 0
@@ -34,5 +55,8 @@ let Ball_D = ""
 let Ball_G = ""
 let Commande: string[] = []
 let RX = ""
+let Pos_S1 = 0
 radio.setGroup(1)
+Pos_S1 = 90
+maqueen.servoRun(maqueen.Servos.S1, Pos_S1)
 basic.showIcon(IconNames.Skull)
